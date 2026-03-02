@@ -4,7 +4,7 @@ A comprehensive demonstration of a **production-grade Infrastructure as Code (Ia
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 1. [Architecture Overview](#architecture-overview)
 2. [Prerequisites & Setup](#prerequisites--setup)
 3. [Core Features](#core-features)
@@ -14,7 +14,7 @@ A comprehensive demonstration of a **production-grade Infrastructure as Code (Ia
 
 ---
 
-## 🏗️ Architecture Overview
+##  Architecture Overview
 
 ### Infrastructure Components
 This project deploys a **highly available, secure, and scalable** 2-tier web application architecture:
@@ -68,7 +68,7 @@ We manage **three isolated environments** using Terraform workspaces:
 
 ---
 
-## 🔧 Prerequisites & Setup
+##  Prerequisites & Setup
 
 ### 1. AWS Account Preparation
 
@@ -79,12 +79,12 @@ aws s3 mb s3://staging-my-terraform-bucket-saydhw --region us-east-1
 
 # Enable versioning for state history
 aws s3api put-bucket-versioning \
-  --bucket staging-my-terraform-bucket-saydhw \
+  --bucket staging-my-terraform-bucket-amit-1001 \
   --versioning-configuration Status=Enabled
 
 # Enable encryption
 aws s3api put-bucket-encryption \
-  --bucket staging-my-terraform-bucket-saydhw \
+  --bucket staging-my-terraform-bucket-amit-1001 \
   --server-side-encryption-configuration '{
     "Rules": [{
       "ApplyServerSideEncryptionByDefault": {
@@ -98,7 +98,7 @@ aws s3api put-bucket-encryption \
 ```hcl
 terraform {
   backend "s3" {
-    bucket       = "staging-my-terraform-bucket-saydhw"  # Your bucket name
+    bucket       = "staging-my-terraform-bucket-amit-1001"  # Your bucket name
     key          = "terraform/state/main/terraform.tfstate"
     region       = "us-east-1"
     use_lockfile = true  # S3 Native Locking (Terraform 1.13+)
@@ -137,8 +137,8 @@ terraform version
 tflint --version
 
 # Clone repository
-git clone https://github.com/itsBaivab/aws-devops.git
-cd aws-devops
+git clone https://github.com/Amitkushwaha7/TerraformFullCourse.git
+cd TerraformFullCourse/Day-27
 
 # Initialize Terraform
 terraform init
@@ -400,7 +400,7 @@ terraform workspace select prod
 terraform show | head -20
 
 # 4. Show S3 state structure
-aws s3 ls s3://staging-my-terraform-bucket-saydhw/env:/ --recursive
+aws s3 ls s3://staging-my-terraform-bucket-amit-1001/env:/ --recursive
 ```
 
 **Expected Output:**
@@ -909,7 +909,7 @@ terraform state push                      # Upload state
 
 ### Project Structure
 ```
-aws-devops/
+Day-27/
 ├── .github/
 │   └── workflows/
 │       ├── terraform.yml          # Main CI/CD pipeline
@@ -952,7 +952,7 @@ aws-devops/
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 To contribute to this project:
 1. Fork the repository
@@ -963,7 +963,7 @@ To contribute to this project:
 
 ---
 
-## 📞 Support
+##  Support
 
 For issues or questions:
 - Open an issue on GitHub
@@ -972,6 +972,3 @@ For issues or questions:
 
 ---
 
-**Last Updated:** December 22, 2025
-**Version:** 2.0
-**Maintained by:** Infrastructure Team

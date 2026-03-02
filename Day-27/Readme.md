@@ -1,22 +1,24 @@
-# AWS Production Infrastructure - Demo Guide
+# Automating AWS Infra Using Terraform and Github Actions
 
-## �️ Dedicated Infrastructure Repository
+![architecture digram](./assets/architecture_digram.gif)
+
+##  Dedicated Infrastructure Repository
 
 This repository follows the **Infrastructure as Code (IaC)** best practice of "Separation of Concerns". It is strictly dedicated to managing the AWS platform resources.
 
-### 🔄 CI/CD Workflow (Infrastructure Only)
+###  CI/CD Workflow (Infrastructure Only)
 This repository uses a dedicated GitHub Actions workflow (`.github/workflows/terraform.yml`) that:
 1.  **Plans** changes on Pull Requests (with Security & Linting checks).
 2.  **Applies** changes to `dev`, `test`, or `prod` environments based on the branch.
 
-### 🤝 Integration with Application Code
+###  Integration with Application Code
 In a real-world scenario, this repository would interface with a separate **Application Repository**:
 1.  **App Repo:** Builds the application and creates an AMI (Amazon Machine Image).
 2.  **Infra Repo (This one):** Receives the new `ami_id` and performs a rolling update of the Auto Scaling Group.
 
 *Note: For demonstration purposes, this repo currently uses a `user_data.sh` script to bootstrap Nginx, simulating the application layer.*
 
-## �🎯 Overview
+##  Overview
 
 This demo guide walks you through deploying a production-grade 2-tier AWS infrastructure using Terraform. The infrastructure includes:
 
@@ -28,7 +30,7 @@ This demo guide walks you through deploying a production-grade 2-tier AWS infras
 - **S3 Bucket** for static assets and logs
 - **EC2 instances** running Nginx web servers
 
-## 📋 Prerequisites
+##  Prerequisites
 
 Before starting this demo, ensure you have:
 
@@ -53,7 +55,7 @@ Before starting this demo, ensure you have:
 
 4. **AWS Account** with sufficient service quotas for the region
 
-## 🏗️ Architecture Components
+##  Architecture Components
 
 ### Network Layer
 - **VPC**: `10.0.0.0/16` CIDR block
@@ -75,7 +77,7 @@ Before starting this demo, ensure you have:
 ### Storage
 - **S3 Bucket**: For application assets and ALB logs
 
-## 🚀 Step-by-Step Demo
+##  Step-by-Step Demo
 
 ### Step 1: Clone and Navigate
 
@@ -202,7 +204,7 @@ echo "Access your application at: http://$ALB_DNS"
 
 Open the URL in your browser to see the Nginx welcome page.
 
-## 🔍 Verification Steps
+##  Verification Steps
 
 ### Check Auto Scaling Group
 
@@ -244,7 +246,7 @@ aws ec2 describe-vpcs --vpc-ids $VPC_ID
 aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" --query "Subnets[*].[SubnetId,CidrBlock,AvailabilityZone,MapPublicIpOnLaunch]" --output table
 ```
 
-## 🧪 Testing Auto Scaling
+##  Testing Auto Scaling
 
 ### Trigger Scale-Up Event
 
@@ -266,7 +268,7 @@ aws autoscaling describe-scaling-activities \
   --max-records 5
 ```
 
-## 📊 Cost Estimation
+##  Cost Estimation
 
 **Approximate monthly costs (us-east-1):**
 - EC2 (t2.micro × 2): ~$15
@@ -278,7 +280,7 @@ aws autoscaling describe-scaling-activities \
 
 **Demo costs:** If destroyed within 1 hour: ~$0.15
 
-## 🧹 Cleanup
+##  Cleanup
 
 ### Step 1: View Resources to be Destroyed
 
@@ -305,7 +307,7 @@ Type `yes` when prompted.
 aws ec2 describe-vpcs --filters "Name=tag:Project,Values=AWS-Production-Infrastructure"
 ```
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Issue: Instances Not Healthy
 
@@ -354,7 +356,7 @@ terraform apply -refresh=true
 - Comment out NAT Gateway in `vpc.tf`
 - Place instances in public subnets (not recommended for production)
 
-## 📝 Key Learning Points
+##  Key Learning Points
 
 1. **Infrastructure as Code:** All resources defined declaratively
 2. **High Availability:** Multi-AZ deployment ensures fault tolerance
@@ -363,13 +365,13 @@ terraform apply -refresh=true
 5. **Load Balancing:** Traffic distribution and health monitoring
 6. **State Management:** Terraform tracks infrastructure state
 
-## 🔗 Additional Resources
+##  Additional Resources
 
 - [Terraform AWS Provider Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [AWS VPC Best Practices](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-best-practices.html)
 - [Auto Scaling Documentation](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html)
 
-## 📧 Support
+##  Support
 
 For issues or questions, please check:
 - AWS CloudWatch logs for runtime errors
