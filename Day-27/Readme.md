@@ -83,7 +83,8 @@ Before starting this demo, ensure you have:
 
 ```bash
 # If not already in the directory
-cd /home/baivab/repos/Terraform-Full-Course-Aws/lessons/day20/code
+git clone https://github.com/Amitkushwaha7/TerraformFullCourse.git
+cd /Terraform-Full-Course/Day-27
 ```
 
 ### Step 2: Review Configuration Files
