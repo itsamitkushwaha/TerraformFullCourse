@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS goal (
+	id SERIAL PRIMARY KEY,
+	goal_name TEXT NOT NULL
+	);
