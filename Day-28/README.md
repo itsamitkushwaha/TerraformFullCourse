@@ -2,6 +2,8 @@
 
 Highly available 3-tier application: Node.js frontend, Go backend, PostgreSQL database.
 
+![](./assets/AWS_3-Tier_Architecture.gif)
+
 ## Quick Deployment
 
 ### 1. Build and Push Docker Images
