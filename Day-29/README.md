@@ -197,3 +197,40 @@ kubectl logs -f deployment/postgres -n 3tirewebapp-dev
 ```bash
 argocd app sync 3tier-app
 ```
+
+while deploying and tearing down this GitOps/EKS architecture, you might run into a few known behaviours with Terraform and Kubernetes. Here are the solutions:
+
+1. ArgoCD CRD Installation Fails 
+  
+  Error:
+```hcl
+CustomResourceDefinition.apiextensions.k8s.io "applicationsets.argoproj.io" is invalid: metadata.annotations: Too long: must have at most 262144 bytes
+```
+**why it happens:** When using the `kubectl_manifest` provider, Terraform tries to save the entire ArgoCD Custom Resource Definition into a hidden Kubernetes annotation. ArgoCD's CRDs are larger than Kubernetes' 256KB hard limit.
+
+**Solution:** Tell Terraform to shift the change-tracking logic to the Kubernetes API by enabling Server-Side Apply.
+
+```hcl
+resource "kubectl_manifest" "argocd" {
+  # ... existing code ...
+  server_side_apply = true 
+}
+```
+2. Apply Fails with Field Management Conflict
+
+  Error:
+  ```
+  Apply failed with 1 conflict: conflict with "HashiCorp" using networking.k8s.io/v1: .spec.ingress
+  ```
+
+  **Why it happens:** If you initially apply the manifests without `server_side_apply = true`, and then add it later, Kubernetes blocks the change because the "HashiCorp" manager already claimed ownership using the old method.
+
+  **Solution:** Force the conflict resolution in your Terraform resource:
+
+  ```hcl
+  resource "kubectl_manifest" "argocd" {
+  # ... existing code ...
+  server_side_apply = true
+  force_conflicts   = true
+}
+```
