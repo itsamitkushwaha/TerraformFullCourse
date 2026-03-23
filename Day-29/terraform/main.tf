@@ -125,6 +125,9 @@ resource "kubectl_manifest" "argocd" {
   override_namespace = "argocd"
 
   depends_on = [kubernetes_namespace_v1.argocd]
+
+  server_side_apply = true
+  force_conflicts   = true
 }
 
 # Patch ArgoCD server service to LoadBalancer
